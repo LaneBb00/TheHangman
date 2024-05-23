@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+        <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet" href="style.css">    <!-- Collegamento al file css -->
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+        <title>
+            Hangman - L'impiccato
+        </title>
+
+    </head>
+
+    <body>
+        <div id="pag1">     <!-- Div che contiene la pagina 1 ovvero una sorta di sito introduttivo con descrizione, obiettivo e consigli sul gioco e il pulsante per avviare una partita contro il computer -->
+            
+            <!-- Menù Responsivo -->
+
+            <header class="header">     
+              <div class="header__content">
+                <a class="header__logo" href="#">
+                  <strong>The Hangman</strong>
+                </a>
+                <ul class="header__menu">
+                  <li><a href="#description">Description</a></li>   <!-- Collegamento al titolo h2 descrizione -->
+                  <li><a href="#play">Game</a></li>         <!-- Collegamento alla cover contenente il bottone per avviare il gioco -->
+                </ul>
+                <div class="header__quick">
+                  <a href="#">Contacts</a>
+                  <div class="icon-hamburger">
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+              </div>
+            </header>
+
+            <!--Cover che carica delle immagini casuali dal sito unsplash -->
+            <div class="cover" style="background-image:linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6)), url('https://source.unsplash.com/random');">
+              <div class="cover__content">
+                <h1>The Hangman</h1>
+                <h2>Gioca con i tuoi amici!</h2>
+              </div>
+            </div>
+
+            <div id="spacer"></div>     <!-- Div che serve ad inserire uno spazio -->
+
+            <div class="grid">  <!-- Griglia -->
+                <div class="col-100">   <!-- Colonna dimensione 100 della griglia -->
+                    <h2 id="description">
+                        Descrizione
+                    </h2>    
+                </div>
+            </div>
+            
+            <div class="grid">  <!-- Griglia -->
+                <div class="col-50">    <!-- Colonna dal 50% dello spazio della griglia -->
+                    <p>
+                        Il gioco dell'impiccato è un passatempo divertente e coinvolgente che può essere giocato da due o più persone. Per iniziare, un giocatore seleziona una parola segreta senza rivelarla agli altri giocatori. Questa parola può essere di qualsiasi lunghezza e può appartenere a qualsiasi categoria, come nomi, luoghi, animali, o qualsiasi altra cosa.
+                    </p>
+                </div>
+                <div class="col-50">    <!--Colonna dal 50% dello spazio della griglia -->
+                    <p>
+                        Una volta che la parola segreta è stata scelta, il giocatore disegna una serie di linee orizzontali su un foglio di carta. Ogni linea rappresenta una lettera della parola segreta. Tuttavia, inizialmente tutte le lettere sono nascoste, quindi i giocatori vedono solo il numero di lettere presenti nella parola.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid pt-3">         <!-- Griglia -->
+                <div class="col-50 pt-2">   <!-- Colonna dal 50% dello spazio della griglia -->
+                    <h3>
+                        Obiettivo
+                    </h3>
+                    <p>
+                        Gli altri giocatori propongono lettere per indovinare la parola. Ogni lettera corretta viene inserita nelle posizioni corrispondenti, altrimenti viene disegnata una parte dell'impiccato. L'obiettivo è indovinare la parola prima che il disegno dell'impiccato sia completato.
+                    </p>
+                    <h3 class="pt-1">
+                        Consigli
+                    </h3>
+                    <p>
+                        Inizia con le vocali e le consonanti più comuni: Quando suggerisci una lettera, inizia con le vocali (A, E, I, O, U) e le consonanti più comuni nella lingua in cui state giocando (ad esempio, S, N, T, R, L). Queste lettere sono più probabili di comparire nella parola segreta.
+                    </p>
+                    <p>
+                        Osserva il campo di gioco: Prima di suggerire una lettera, osserva il campo di gioco e cerca di individuare eventuali schemi o indizi che potrebbero aiutarti a indovinare la parola. Ad esempio, se ci sono alcune lettere già indovinate, cerca di formare parole comuni che potrebbero includere quelle lettere.
+                    </p>
+                    <p>
+                        Evita lettere meno comuni: Quando sei indeciso su quale lettera suggerire, evita di suggerire lettere meno comuni o particolari che potrebbero essere meno presenti nella parola segreta. Ad esempio, evita di suggerire lettere come Q, X o Z a meno che non ci siano forti indizi che suggeriscano la loro presenza.
+                    </p>
+                </div>
+                <div class="col-50 pb-3" id="play">     <!-- Cover che contiene un bottone che cambia pagina e carica il gioco -->
+                    <div class="cover" style="background-image:linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6)), url('https://source.unsplash.com/random');">
+                        <div class="cover__content">
+                        <h1> Gioca!</h1>
+                        <h2> Gioca contro il computer. </h2>
+                      <a href="#" onclick="change()" class="button">Play</a>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="game" class="mt-4">    <!-- Div che contiene il gioco dell'impiccato -->
+
+            <h1 class="text-center text-2">Hangman - L'impiccato</h1>
+
+                <div id="img" class="mt-2 mb-2">    <!-- Div che contiene tutte le immagini di tutte le situazioni in cui l'omino si può trovare in base all'aver indovnato o meno le lettere -->
+
+                    <img id="img1" src="img/1.png" alt="Errore nel caricamento dell'immagine">
+                    <img id="img2" src="img/2.png" alt="Errore nel caricamento dell'immagine">
+                    <img id="img3" src="img/3.png" alt="Errore nel caricamento dell'immagine">
+                    <img id="img4" src="img/4.png" alt="Errore nel caricamento dell'immagine">
+                    <img id="img5" src="img/5.png" alt="Errore nel caricamento dell'immagine">
+                    <img id="img6" src="img/6.png" alt="Errore nel caricamento dell'immagine">
+                    <img id="img7" src="img/7.png" alt="Errore nel caricamento dell'immagine">
+                    <img id="img8" src="img/8.png" alt="Errore nel caricamento dell'immagine">
+
+                </div>     
+
+            <div class="text-center mt-2 mb-2" id="parola-segreta"></div>       <!-- Div che contiene la parola segreta mostrando di volta in volta le lettere indovinate -->
+
+            <div class="text-center mt-2 mb-2" id="tentativi-rimanenti"></div>  <!-- Div che contiene un testo che indica il numero di tentativi rimanenti prima di completare l'omino -->
+
+            <div class="grid mt-2 mb-2">    <!-- Griglia con margin top e bottom di livello 2 (guardare il file style.css) -->
+                <div class="col-50">    <!-- Creo colonna dal 50% di spazio della griglia -->
+                    <input class="p-1" type="text" id="lettera-input" maxlength="1" placeholder="Inserisci una lettera">
+                </div>
+                <div class="col-50">    <!-- Creo colonna dal 50% di spazio della griglia -->
+                    <button class="p-1 button" type="button" pys-onclick="gioca" id="submit" onclick="test()">Indovina</button>
+                </div>
+            </div>
+            
+            <div id="pcanswers" class="text-center mt-3 mb-1"></div>    <!-- Div che conterrà le risposte generate dal computer riguardo l'aver indovinato le lettere o meno e riguardo l'aver vinto o meno -->
+
+            <div id="ricarica"></div>   <!-- Div che conterrà il bottone di refresh della pagina inserito attraverso il JavaScript -->
+        
+        </div>
+
+            <py-script>
+
+                import random   #importo la libreria random che mi consente di scegliere casualmente una parola nell'array di stringhe
+                import js       #importo la libreria js che mi consente l'utilizzo di JavaScript su py-script
+
+                def scegli_parola():    #funzione che si occupa di scegliere una parola casuale fra quelle presenti nell'array parole
+
+                    parole = ["cane", "gatto", "elefante", "tigre", "leone", "zebra",
+                                "banana", "arancia", "mela", "pera", "fragola", "ciliegia",
+                                "casa", "appartamento", "villa", "palazzo", "scarpa", "formaggio",
+                                "mare", "montagna", "collina", "fiume", "lago", "cascata",
+                                "sole", "luna", "stella", "nuvola", "pioggia", "vento"]
+
+                    return random.choice(parole)    #scelgo una parola casuale dell'array di stringhe parole
+                
+                parola_segreta = scegli_parola()    #creo la parola segreta scegliendola casualmente utilizzando la funzione scegli_parola()
+                lettere_indovinate = []             #array che conterrà le lettere indovinate
+                tentativi_restanti = 7              #imposto un numero massimo di tentativi pari a 7, il numero di segmenti di cui è composto l'omino
+                parola_da_mostrare = ["_ "] * len(parola_segreta)   #imposto la parola da mostrare inizializzandola con tutti trattini
+
+                pyscript.write('parola-segreta', " ".join(parola_da_mostrare))  #scrivo nel div parola segreta, la parola da mostrare, utilizzo join essendo una lista di stringhe e dovendo farla visualizzare come una unica stringa
+                pyscript.write('tentativi-rimanenti', "Tentativi rimanenti: " + str(tentativi_restanti)) #stampo i tentativi rimanenti
+
+                def gioca(e):
+                    global parola_da_mostrare   #importo le variabili globali
+                    global parola_segreta
+                    global lettere_indovinate
+                    global tentativi_restanti
+
+                    if js.test()==True:         #controllo che nell'input vi sia inserita una lettera, in caso contrario non eseguo il codice, guardare il file hangman.js
+
+                        check=True      #imposto una variabile booleana a true da utilizzare per il controllo dell'inserimento di una lettera già indovinata
+
+                        lettera=Element("lettera-input").value.lower()      #prelevo il carattere inserito in input e lo imposto a lower per poter effettuare agevolmente i controlli con la parola segreta
+
+                        if lettera in lettere_indovinate:       #se ho inserito una lettera che già avevo indovinato
+                            check=False                         #il controllo diventa falso e non eseguo il successivo codice
+                            js.alert()                          #invio l'alert che appunto dice che la lettera inserita è già stata indovinata
+                        elif lettera in parola_segreta:     #altrimenti se ho inserito una lettera presente nella parola segreta
+                            pyscript.write('pcanswers',"Ottimo! Hai indovinato una lettera.")   #comunico che è stata indovinata una lettera stampando la frase nel div pcanswers
+                            lettere_indovinate.append(lettera)  #memorizzo la lettera appena indovinata nell'array delle lettere indovinate
+                        else:
+                            pyscript.write('pcanswers',"Oops! Questa lettera non è nella parola segreta.")  #altrimenti l'unica alternativa rimasta è il caso in cui la lettera non è presente nella parola segreta, lo comunico
+                            tentativi_restanti -= 1        #decremento il numero di tentativi rimanenti
+
+                        if check==True:                 #se è stata inserita dunque una lettera che non è stata precedentemente indovinata
+                            parola_da_mostrare = ""     #azzero la parola da mostrare e la ricostruisco in base a cosa ho indovinato
+
+                            for carattere in parola_segreta:    #scorro le lettere nella parola segreta
+                                if carattere in lettere_indovinate:     #se la lettera della parola segreta si trova nell'array delle parole indovinate ed è dunque stata indovinata
+                                    parola_da_mostrare += carattere.upper()+" "     #la parola da mostrare si aggiorna inserendo in tale posizione la lettera, in maiuscolo per una questione visiva
+                                else:
+                                    parola_da_mostrare += "_ "      #altrimenti se la lettera non è stata indovinata inserisco un trattino
+
+                            pyscript.write('parola-segreta',parola_da_mostrare)     #stampo la parola da mostrare
+                            pyscript.write('tentativi-rimanenti', "Tentativi rimanenti: " + str(tentativi_restanti))    #stampo i tentativi rimanenti
+
+                            parola_da_mostrare = ""     #riazzero la parola da mostrare e la ricostruisco senza spazi per poter effettuare il controllo con la parola segreta
+
+                            for carattere in parola_segreta:    
+                                if carattere in lettere_indovinate:
+                                    parola_da_mostrare += carattere.upper()
+                                else:
+                                    parola_da_mostrare += "_"
+
+                            if parola_da_mostrare == parola_segreta.upper():        #controllo dunque se la parola segreta è stata interamente indovinata
+                                pyscript.write('pcanswers',"Hai indovinato! La parola segreta era: "+parola_segreta.upper())    #comunico la vittoria
+                                js.end()   #attivo la funzione JavaScript end() per terminare il gioco
+
+                            if tentativi_restanti == 0:     #se invece ho esaurito i tentativi e ho di conseguenza perso, ovvero ho completato l'omino
+                                pyscript.write('pcanswers',"Hai esaurito i tentativi! La parola segreta era: "+parola_segreta.upper())  #comunico la misfatta
+                                js.end()        #attivo la funzione JavaScript end() per terminare il gioco
+                                
+                    js.immagine(tentativi_restanti)     #utilizzando una funzione JavaScript carico l'immagine correlata al tentativo a cui sono giunto, 
+                                                        #partendo dal caso in cui i tentativi sono sette e l'omino ancora non è comparso, fino alla situazione in cui è presente l'intero omino
+            </py-script>
+
+        <script src="hangman.js"></script> <!-- Collego il file JavaScript -->
+
+    </body>
+
+</html>
